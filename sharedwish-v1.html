@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SharedWish</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet">
+<script src="firebase-config.js"></script>
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<div class="wrap">
+
+  <div id="screen-login" class="screen active">
+    <div class="top-line">
+      <a class="login-profile" id="login-profile" href="index.html" aria-label="Buka profil pengguna">
+        <span class="icon" id="login-profile-placeholder" aria-hidden="true">account_circle</span>
+        <img id="login-profile-photo" alt="" style="display:none;">
+        <span class="login-profile-name" id="login-profile-name"></span>
+      </a>
+      <button class="gear" onclick="getApiUrl(true)"><span class="icon small" aria-hidden="true">settings</span> Apps Script URL</button>
+    </div>
+    <div style="text-align:center;margin-bottom:24px;">
+      <h1 class="brand" style="font-size:30px;"><span class="icon" aria-hidden="true">favorite</span> SharedWish</h1>
+      <p class="badge">Ruang wishlist &amp; pengingat acara bersama</p>
+    </div>
+    <div class="tab-row">
+      <button class="tab-btn active" id="tab-join" onclick="switchAuthTab('join')">Masuk</button>
+      <button class="tab-btn" id="tab-create" onclick="switchAuthTab('create')">Buat Room</button>
+    </div>
+    <div class="card auth-form active" id="form-join">
+      <input id="in-roomid" placeholder="Room ID (mis. MYMBG01)" autocapitalize="characters">
+      <input id="in-pin" type="password" inputmode="numeric" maxlength="8" placeholder="PIN (4–8 angka)">
+      <button class="btn-primary" id="btn-join" onclick="joinRoom()">Masuk</button>
+      <p class="hint" style="margin-top:10px;">Pertama kali masuk, PIN yang kamu isi jadi PIN pribadimu. Lain kali pakai PIN yang sama.</p>
+    </div>
+    <div class="card auth-form" id="form-create">
+      <input id="in-newroomname" placeholder="Nama room, mis. My MBG">
+      <input id="in-sheeturl" placeholder="Link atau ID Google Spreadsheet kamu">
+      <input id="in-newpin" type="password" inputmode="numeric" maxlength="8" placeholder="PIN pribadi (4–8 angka)">
+      <input id="in-createcode" placeholder="Kode pembuat (isi hanya jika diatur di backend)">
+      <button class="btn-primary" id="btn-create" onclick="createRoom()">Buat Room Baru</button>
+      <p class="hint" style="margin-top:10px;">Spreadsheet hanya dikirim sekali ke backend; setelah itu backend yang menentukan Spreadsheet dari Room ID.</p>
+    </div>
+  </div>
+
+  <div id="screen-room" class="screen">
+    <header class="top">
+      <div>
+        <h2 id="room-name">Room</h2>
+        <div class="member-list" id="room-members" aria-label="Profil dan anggota room"></div>
+        <span class="room-id-badge" id="room-id-badge"></span>
+      </div>
+      <div class="action-row" style="margin:0;">
+        <button class="btn-ghost" onclick="logout()"><span class="icon small" aria-hidden="true">logout</span> Keluar</button>
+      </div>
+    </header>
+    <div id="banners"></div>
+    <div class="stat-row" id="room-stats"></div>
+    <div class="card" id="progress"></div>
+    <div class="nav-grid">
+      <button class="nav-btn" onclick="goWishlist()"><span class="icon" aria-hidden="true">favorite</span> Wishlist</button>
+      <button class="nav-btn" onclick="goEntity('events')"><span class="icon" aria-hidden="true">event</span> Event</button>
+      <button class="nav-btn" onclick="goEntity('secrets')"><span class="icon" aria-hidden="true">lock</span> Secret</button>
+      <button class="nav-btn" onclick="goEntity('memories')"><span class="icon" aria-hidden="true">photo_camera</span> Memory</button>
+    </div>
+    <div class="row-btns">
+      <button class="btn-sm" onclick="shareRoom()"><span class="icon small" aria-hidden="true">group_add</span> Undang</button>
+      <button class="btn-sm" onclick="enableNotif()"><span class="icon small" aria-hidden="true">notifications</span> Notifikasi</button>
+      <button class="btn-sm" onclick="exportJson()"><span class="icon small" aria-hidden="true">download</span> JSON</button>
+      <button class="btn-sm" onclick="exportCsv()"><span class="icon small" aria-hidden="true">download</span> CSV</button>
+    </div>
+  </div>
+
+  <div id="screen-wishlist" class="screen">
+    <header class="top">
+      <div>
+        <button class="btn-ghost" onclick="goRoom()" style="padding-left:0;"><span class="icon small" aria-hidden="true">arrow_back</span> Room</button>
+        <h2>Wishlist</h2>
+      </div>
+    </header>
+    <p class="sync-note" id="sync-note"></p>
+    <div id="wishlist-list"></div>
+    <button class="fab" onclick="openModal()" aria-label="Tambah wishlist"><span class="icon" aria-hidden="true">add</span></button>
+  </div>
+
+  <div id="screen-entity" class="screen">
+    <header class="top"><div>
+      <button class="btn-ghost" onclick="goRoom()" style="padding-left:0;"><span class="icon small" aria-hidden="true">arrow_back</span> Room</button>
+      <h2 id="ent-title"></h2><p class="badge" id="ent-sub"></p>
+    </div></header>
+    <div id="ent-list"></div>
+    <button class="fab" id="ent-fab" onclick="openEnt()" aria-label="Tambah"><span class="icon" aria-hidden="true">add</span></button>
+  </div>
+
+</div>
+
+<div class="modal-back" id="modal-back">
+  <div class="modal">
+    <h3 id="modal-title">Tambah Wishlist</h3>
+    <input id="f-title" placeholder="Judul (mis. Camping bareng)">
+    <textarea id="f-desc" placeholder="Deskripsi (opsional)" rows="2"></textarea>
+    <div class="row2">
+      <select id="f-category">
+        <option value="Umum">Umum</option>
+        <option value="Kuliner">Kuliner</option>
+        <option value="Jalan-jalan">Jalan-jalan</option>
+        <option value="Hiburan">Hiburan</option>
+        <option value="Lainnya">Lainnya</option>
+      </select>
+      <select id="f-priority">
+        <option value="Rendah">Prioritas: Rendah</option>
+        <option value="Sedang" selected>Prioritas: Sedang</option>
+        <option value="Tinggi">Prioritas: Tinggi</option>
+      </select>
+    </div>
+    <div class="row2">
+      <select id="f-status">
+        <option value="idea">Ide</option>
+        <option value="planned">Direncanakan</option>
+        <option value="preparing">Dipersiapkan</option>
+        <option value="done">Selesai</option>
+      </select>
+      <input id="f-target" type="date">
+    </div>
+    <button class="btn-sm" id="btn-mem" style="display:none;margin-bottom:12px" onclick="memWish()"></button>
+    <div class="action-row">
+      <button class="btn-ghost" onclick="closeModal()">Batal</button>
+      <button class="btn-danger" id="btn-delete" onclick="deleteWish()" style="display:none;">Hapus</button>
+      <button class="btn-primary" id="btn-save" onclick="saveWish()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-back" id="ent-modal">
+  <div class="modal">
+    <h3 id="ent-mtitle"></h3>
+    <div id="ent-fields"></div>
+    <div id="ent-extra"></div>
+    <div class="action-row">
+      <button class="btn-ghost" onclick="closeEnt()">Batal</button>
+      <button class="btn-danger" id="ent-del" onclick="delEnt()" style="display:none;">Hapus</button>
+      <button class="btn-primary" id="ent-save" onclick="saveEnt()">Simpan</button>
+    </div>
+  </div>
+</div>
+<script src="js/main.js"></script>
+</body>
+</html>
