@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f3f5ef">
+<title>SharedWish | Login</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet">
+<script src="firebase-config.js"></script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<main>
+  <div class="intro">
+    <div class="brand"><span class="icon" aria-hidden="true">favorite</span> SharedWish</div>
+    <p>Ruang kecil untuk rencana yang ingin diwujudkan bersama.</p>
+  </div>
+  <section id="auth-panel">
+    <form id="auth-form">
+      <h1 id="auth-heading">Login</h1>
+      <p class="hint" id="auth-subtitle">Selamat datang kembali, masuk ke akun SharedWish kamu.</p>
+      <div class="auth-fields">
+        <label class="sr-only" for="auth-username">Username</label>
+        <div class="input-wrap">
+          <span class="icon" aria-hidden="true">person</span>
+          <input id="auth-username" type="text" maxlength="30" autocomplete="username" autocapitalize="none" placeholder="Username" required>
+        </div>
+        <label class="sr-only" for="auth-password">Password</label>
+        <div class="input-wrap">
+          <span class="icon" aria-hidden="true">lock</span>
+          <input id="auth-password" type="password" minlength="8" autocomplete="current-password" placeholder="Password" required>
+          <button class="password-toggle" id="toggle-password" type="button" aria-label="Tampilkan password"><span class="icon" aria-hidden="true">visibility_off</span></button>
+        </div>
+        <div id="confirm-password-wrap" class="input-wrap" hidden>
+          <span class="icon" aria-hidden="true">lock</span>
+          <label class="sr-only" for="auth-confirm-password">Ulangi password</label>
+          <input id="auth-confirm-password" type="password" minlength="8" autocomplete="new-password" placeholder="Ulangi password">
+        </div>
+      </div>
+      <label class="remember-row" for="remember-username">
+        <input id="remember-username" type="checkbox">
+        <span>Ingat username di perangkat ini</span>
+      </label>
+      <p class="auth-error" id="auth-error" aria-live="polite"></p>
+      <button type="submit" id="auth-submit"><span class="icon" aria-hidden="true" style="color:inherit">login</span> Masuk</button>
+    </form>
+    <form id="recovery-form" hidden>
+      <h1>Pulihkan akun</h1>
+      <p class="hint">Masukkan username dan kode pemulihan yang kamu simpan.</p>
+      <div class="auth-fields">
+        <label class="sr-only" for="recovery-username">Username</label>
+        <div class="input-wrap"><span class="icon" aria-hidden="true">person</span><input id="recovery-username" type="text" maxlength="30" autocomplete="username" autocapitalize="none" placeholder="Username" required></div>
+        <label class="sr-only" for="recovery-code">Kode pemulihan</label>
+        <div class="input-wrap"><span class="icon" aria-hidden="true">key</span><input id="recovery-code" type="text" maxlength="40" autocomplete="off" autocapitalize="characters" placeholder="Kode pemulihan" required></div>
+      </div>
+      <button type="submit" id="recovery-submit">Pulihkan akun</button>
+    </form>
+    <div class="auth-links">
+      <div class="account-switch"><span id="auth-switch-copy">Belum punya akun?</span><button class="text-button" id="tab-register" type="button">Daftar</button><button class="text-button" id="tab-login" type="button" hidden>Masuk</button></div>
+      <button class="text-button" id="tab-recover" type="button">Lupa password?</button>
+    </div>
+  </section>
+  <section id="recovery-panel" hidden>
+    <h1>Simpan kode pemulihan</h1>
+    <p class="hint">Kode ini hanya ditampilkan sekarang. Kode sebelumnya sudah tidak berlaku.</p>
+    <code class="recovery-code" id="recovery-code-display"></code>
+    <button type="button" id="copy-recovery">Salin kode</button>
+    <p class="photo-error" id="recovery-copy-status" aria-live="polite"></p>
+    <button type="button" class="secondary-button" id="continue-after-recovery">Saya sudah menyimpan kode</button>
+  </section>
+  <form id="profile-form" hidden>
+    <h1>Mulai dari nama kamu</h1>
+    <p class="hint">Nama ini akan dipakai saat kamu membuat atau bergabung ke room.</p>
+    <p class="account-note" id="account-label"></p>
+    <div class="profile-photo-row">
+      <div class="avatar-preview">
+        <span class="icon" id="photo-placeholder" aria-hidden="true">person</span>
+        <img id="photo-preview" alt="Pratinjau foto profil">
+      </div>
+      <div class="photo-actions">
+        <label class="photo-select" for="profile-photo"><span class="icon" aria-hidden="true">photo_camera</span> Pilih foto profil</label>
+        <input class="photo-input" id="profile-photo" type="file" accept="image/*">
+        <button class="photo-remove" id="remove-photo" type="button">Hapus foto</button>
+        <p class="photo-error" id="photo-error" aria-live="polite"></p>
+      </div>
+    </div>
+    <label for="profile-name">Nama profil</label>
+    <input id="profile-name" name="name" type="text" maxlength="30" autocomplete="nickname" placeholder="Contoh: Alex" required>
+    <button type="submit" id="profile-submit"><span class="icon" aria-hidden="true" style="color:inherit">arrow_forward</span> Lanjutkan</button>
+    <button class="secondary-button" id="rotate-recovery" type="button">Ganti kode pemulihan</button>
+    <button class="secondary-button" id="logout-button" type="button">Keluar dari akun</button>
+  </form>
+  <footer>Nama profil bisa diganti kapan saja.</footer>
+</main>
+<script src="js/script.js"></script>
+</body>
+</html>
