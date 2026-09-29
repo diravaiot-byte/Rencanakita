@@ -1,2 +1,2 @@
-window.SHAREDWISH_FIREBASE_API_KEY = 'AIzaSyDYCLsiGDKSjiPDC8Fa96JeFh0hg4Y4M9I';
-window.SHAREDWISH_API_URL = 'https://script.google.com/macros/s/AKfycbwmFNRcUh94y8haKvsyM12ER3qZaB1dNySr7VJLf5aOfPA-KWbtUd4JCZuvsw13t2e7/exec';
+window.SHAREDWISH_FIREBASE_API_KEY = 'AIzaSyB2EVNVwSTgpn7f0PKmGlXCBn45KEw4FEE';
+window.SHAREDWISH_API_URL = 'https://script.google.com/macros/s/AKfycbwLk_jY-9qRws3QoepCqfkkoe-mWCvkJucfzcXAKPT8n7Kc5q4pGAGueRn2o180xxVz/exec';
