@@ -47,15 +47,13 @@
       <button type="submit" id="auth-submit"><span class="icon" aria-hidden="true" style="color:inherit">login</span> Masuk</button>
     </form>
     <form id="recovery-form" hidden>
-      <h1>Pulihkan akun</h1>
-      <p class="hint">Masukkan username dan kode pemulihan yang kamu simpan.</p>
+      <h1>Lupa password?</h1>
+      <p class="hint">Masukkan username kamu. Kami akan mengirim link reset password ke email yang terdaftar di Firebase.</p>
       <div class="auth-fields">
         <label class="sr-only" for="recovery-username">Username</label>
         <div class="input-wrap"><span class="icon" aria-hidden="true">person</span><input id="recovery-username" type="text" maxlength="30" autocomplete="username" autocapitalize="none" placeholder="Username" required></div>
-        <label class="sr-only" for="recovery-code">Kode pemulihan</label>
-        <div class="input-wrap"><span class="icon" aria-hidden="true">key</span><input id="recovery-code" type="text" maxlength="40" autocomplete="off" autocapitalize="characters" placeholder="Kode pemulihan" required></div>
       </div>
-      <button type="submit" id="recovery-submit">Pulihkan akun</button>
+      <button type="submit" id="recovery-submit">Kirim email reset</button>
     </form>
     <div class="auth-links">
       <div class="account-switch"><span id="auth-switch-copy">Belum punya akun?</span><button class="text-button" id="tab-register" type="button">Daftar</button><button class="text-button" id="tab-login" type="button" hidden>Masuk</button></div>
@@ -63,12 +61,12 @@
     </div>
   </section>
   <section id="recovery-panel" hidden>
-    <h1>Simpan kode pemulihan</h1>
-    <p class="hint">Kode ini hanya ditampilkan sekarang. Kode sebelumnya sudah tidak berlaku.</p>
-    <code class="recovery-code" id="recovery-code-display"></code>
-    <button type="button" id="copy-recovery">Salin kode</button>
+    <h1>Email terkirim</h1>
+    <p class="hint">Cek inbox kamu untuk link reset password.</p>
+    <code class="recovery-code" id="recovery-code-display" style="font-size:13px;line-height:1.6;"></code>
+    <button type="button" id="copy-recovery" style="display:none;">Salin kode</button>
     <p class="photo-error" id="recovery-copy-status" aria-live="polite"></p>
-    <button type="button" class="secondary-button" id="continue-after-recovery">Saya sudah menyimpan kode</button>
+    <button type="button" class="secondary-button" id="continue-after-recovery">Kembali ke Login</button>
   </section>
   <form id="profile-form" hidden>
     <h1>Mulai dari nama kamu</h1>
@@ -89,7 +87,7 @@
     <label for="profile-name">Nama profil</label>
     <input id="profile-name" name="name" type="text" maxlength="30" autocomplete="nickname" placeholder="Contoh: Alex" required>
     <button type="submit" id="profile-submit"><span class="icon" aria-hidden="true" style="color:inherit">arrow_forward</span> Lanjutkan</button>
-    <button class="secondary-button" id="rotate-recovery" type="button">Ganti kode pemulihan</button>
+    <button class="secondary-button" id="rotate-recovery" type="button">Ganti password</button>
     <button class="secondary-button" id="logout-button" type="button">Keluar dari akun</button>
   </form>
   <footer>Nama profil bisa diganti kapan saja.</footer>
