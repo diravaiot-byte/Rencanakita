@@ -110,7 +110,13 @@ let state = { currentRoom: null, currentUser: null, rooms: {} };
 let editingId = null;
 let profileName = '', profileId = '', previousNames = [];
 
-function loadState() { try { const r = localStorage.getItem('sharedwish'); if (r) state = JSON.parse(r); } catch(e) {} }
+function loadState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('sharedwish') || 'null');
+    if (saved && typeof saved === 'object' && !Array.isArray(saved)) state = { ...state, ...saved };
+  } catch(e) {}
+  if (!state.rooms || typeof state.rooms !== 'object' || Array.isArray(state.rooms)) state.rooms = {};
+}
 function saveState() { try { localStorage.setItem('sharedwish', JSON.stringify(state)); } catch(e) {} }
 function show(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
