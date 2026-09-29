@@ -133,7 +133,7 @@ async function updateFirebaseName(displayName){
   if(account.recoveryAuth){account.displayName=displayName;sessionStorage.setItem(sessionKey,JSON.stringify(account));return;}
   account=await refreshFirebaseSession(account);
   const updated=await firebaseRequest('accounts:update',{idToken:account.idToken,displayName,returnSecureToken:true});
-  account.idToken=updated.idToken;
+  account.idToken=updated.idToken||account.idToken;
   account.refreshToken=updated.refreshToken||account.refreshToken;
   account.expiresAt=Date.now()+(Number(updated.expiresIn)||3600)*1000;
   account.displayName=displayName;
@@ -213,7 +213,7 @@ authForm.addEventListener('submit',async event=>{
     if(authMode==='register'){
       session.displayName=legacyName||username;
       result=await firebaseRequest('accounts:update',{idToken:session.idToken,displayName:session.displayName,returnSecureToken:true});
-      session.idToken=result.idToken;session.refreshToken=result.refreshToken||session.refreshToken;session.expiresAt=Date.now()+(Number(result.expiresIn)||3600)*1000;
+      session.idToken=result.idToken||session.idToken;session.refreshToken=result.refreshToken||session.refreshToken;session.expiresAt=Date.now()+(Number(result.expiresIn)||3600)*1000;
       session.previousNames=readLegacyNames();
       const recoveryCode=createRecoveryCode();
       await appsScriptRequest({action:'registerRecovery',idToken:session.idToken,username,displayName:session.displayName,previousNames:session.previousNames,recoveryCode});
