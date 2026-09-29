@@ -20,7 +20,7 @@
         <img id="login-profile-photo" alt="" style="display:none;">
         <span class="login-profile-name" id="login-profile-name"></span>
       </a>
-      <button class="gear" onclick="getApiUrl(true)"><span class="icon small" aria-hidden="true">settings</span> Apps Script URL</button>
+
     </div>
     <div style="text-align:center;margin-bottom:24px;">
       <h1 class="brand" style="font-size:30px;"><span class="icon" aria-hidden="true">favorite</span> SharedWish</h1>
@@ -32,17 +32,15 @@
     </div>
     <div class="card auth-form active" id="form-join">
       <input id="in-roomid" placeholder="Room ID (mis. MYMBG01)" autocapitalize="characters">
-      <input id="in-pin" type="password" inputmode="numeric" maxlength="8" placeholder="PIN (4–8 angka)">
+      <input id="in-pin" type="password" inputmode="numeric" maxlength="8" placeholder="PIN Room (jika ada)">
       <button class="btn-primary" id="btn-join" onclick="joinRoom()">Masuk</button>
-      <p class="hint" style="margin-top:10px;">Pertama kali masuk, PIN yang kamu isi jadi PIN pribadimu. Lain kali pakai PIN yang sama.</p>
+      <p class="hint" style="margin-top:10px;">Masukkan Room ID dan PIN Room untuk bergabung.</p>
     </div>
     <div class="card auth-form" id="form-create">
       <input id="in-newroomname" placeholder="Nama room, mis. My MBG">
-      <input id="in-sheeturl" placeholder="Link atau ID Google Spreadsheet kamu">
-      <input id="in-newpin" type="password" inputmode="numeric" maxlength="8" placeholder="PIN pribadi (4–8 angka)">
-      <input id="in-createcode" placeholder="Kode pembuat (isi hanya jika diatur di backend)">
+      <input id="in-newroompin" type="password" inputmode="numeric" maxlength="8" placeholder="Buat PIN Room (opsional)">
       <button class="btn-primary" id="btn-create" onclick="createRoom()">Buat Room Baru</button>
-      <p class="hint" style="margin-top:10px;">Spreadsheet hanya dikirim sekali ke backend; setelah itu backend yang menentukan Spreadsheet dari Room ID.</p>
+      <p class="hint" style="margin-top:10px;">Room ID akan dibuat otomatis. Bagikan ke pasanganmu beserta PIN-nya.</p>
     </div>
   </div>
 
@@ -54,7 +52,7 @@
         <span class="room-id-badge" id="room-id-badge"></span>
       </div>
       <div class="action-row" style="margin:0;">
-        <button class="btn-ghost" onclick="logout()"><span class="icon small" aria-hidden="true">logout</span> Keluar</button>
+        <button class="btn-ghost" onclick="leaveRoom()"><span class="icon small" aria-hidden="true">logout</span> Keluar</button>
       </div>
     </header>
     <div id="banners"></div>
