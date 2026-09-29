@@ -162,6 +162,7 @@ async function createRoom() {
     await fsSet(roomPath(roomId), { roomName, roomPin, createdBy: session.uid, createdAt: new Date().toISOString() });
     const memberId = 'M' + Date.now();
     await fsSet(docPath(roomId, 'members', memberId), { id: memberId, name: userName, profileId: session.uid });
+    if (!state.rooms || typeof state.rooms !== 'object' || Array.isArray(state.rooms)) state.rooms = {};
     state.rooms[roomId] = { name: roomName, memberId, members: [userName], wishlist: [] };
     state.currentRoom = roomId; state.currentUser = userName;
     saveState(); goRoom();
@@ -199,6 +200,7 @@ async function joinRoom() {
         member = { id: memberId, name: userName, profileId: session.uid };
       }
     }
+    if (!state.rooms || typeof state.rooms !== 'object' || Array.isArray(state.rooms)) state.rooms = {};
     const old = state.rooms[roomId] || {};
     state.rooms[roomId] = { ...old, name: roomData.roomName || roomId, memberId: member.id, members: [] };
     state.currentRoom = roomId; state.currentUser = member.name;
