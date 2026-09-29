@@ -30,7 +30,14 @@ function currentRoomObj(){
 }
 
 function getApiUrl(force){
-  let url=localStorage.getItem('sharedwish_apiurl')||window.SHAREDWISH_API_URL||'';
+  const configuredUrl=window.SHAREDWISH_API_URL||'';
+  const configuredUrlKey='sharedwish_apiurl_config';
+  let url=localStorage.getItem('sharedwish_apiurl')||configuredUrl;
+  if(configuredUrl&&configuredUrl!=='REPLACE_WITH_APPS_SCRIPT_WEB_APP_URL'&&localStorage.getItem(configuredUrlKey)!==configuredUrl){
+    url=configuredUrl;
+    localStorage.setItem(configuredUrlKey,configuredUrl);
+    localStorage.setItem('sharedwish_apiurl',configuredUrl);
+  }
   if(url==='REPLACE_WITH_APPS_SCRIPT_WEB_APP_URL') url='';
   if(!url||force){
     url=prompt('Masukkan Apps Script Web App URL (hasil deploy backend):', url||'');
